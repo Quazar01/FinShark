@@ -35,7 +35,7 @@ namespace api.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetStock(int id)
+        public IActionResult GetStock([FromRoute]int id)
         {
             var stock = _context.Stocks.Find(id);
             if (stock == null)
@@ -52,8 +52,28 @@ namespace api.Controllers
 
             _context.Stocks.Add(stock);
             _context.SaveChanges();
-            
+
             return CreatedAtAction(nameof(GetStock), new { id = stock.Id }, stock.ToStockDto());
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateStock([FromRoute] int id, [FromBody] UpdateStockRequestDto updateDto) {
+
+            var stock = _context.Stocks.FirstOrDefault(stock => stock.Id == id);
+            if (stock == null) {
+                return NotFound();
+            }
+
+            stock.Symbol = updateDto.Symbol;
+            stock.CompanyName = updateDto.CompanyName;
+            stock.Purchase = updateDto.Purchase;
+            stock.LastDiv = updateDto.LastDiv;
+            stock.Industry = updateDto.Industry;
+            stock.MarketCap = updateDto.MarketCap;
+
+            _context.SaveChanges();
+
+            return Ok(stock.ToStockDto());
         }
     }
 }
