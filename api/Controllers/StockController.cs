@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
+using api.Dtos.Stock;
 using api.Mappers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,7 @@ namespace api.Controllers
 {
     [Microsoft.AspNetCore.Mvc.Route("api/stock")]
     [ApiController]
-    public class StockController
+    public class StockController : ControllerBase
     {
         private readonly ApplicationDBContext _context;
         
@@ -25,15 +26,12 @@ namespace api.Controllers
         {
             var stocks = _context.Stocks.ToList()
             .Select(stock => stock.ToStockDto());
-            if(stocks.Count() == 0)
+            if(stocks.Count() == 0 || stocks == null)
             {
-                return new NotFoundResult();
+                return NotFound();
             }
-            else if (stocks == null)
-            {
-                return new BadRequestResult();
-            }
-            else return new OkObjectResult(stocks);
+
+            else return Ok(stocks);
         }
 
         [HttpGet("{id}")]
@@ -42,9 +40,20 @@ namespace api.Controllers
             var stock = _context.Stocks.Find(id);
             if (stock == null)
             {
-                return new NotFoundResult();
+                return NotFound();
             }
-            else return new OkObjectResult(stock.ToStockDto());
+            else return Ok(stock.ToStockDto());
+        }
+
+        [HttpPost]
+        public IActionResult CreateStock([FromBody] CreateStockRequestDto stockDto)
+        {
+            var stock = stockDto.ToStockFromCreateDTO();
+
+            _context.Stocks.Add(stock);
+            _context.SaveChanges();
+            
+            return CreatedAtAction(nameof(GetStock), new { id = stock.Id }, stock.ToStockDto());
         }
     }
 }
