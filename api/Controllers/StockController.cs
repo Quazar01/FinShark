@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
+using api.Mappers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
 {
-    [Route("api/stock")]
+    [Microsoft.AspNetCore.Mvc.Route("api/stock")]
     [ApiController]
     public class StockController
     {
@@ -22,8 +23,9 @@ namespace api.Controllers
         [HttpGet]
         public IActionResult GetAllStocks()
         {
-            var stocks = _context.Stocks.ToList();
-            if (stocks.Count == 0)
+            var stocks = _context.Stocks.ToList()
+            .Select(stock => stock.ToStockDto());
+            if(stocks.Count() == 0)
             {
                 return new NotFoundResult();
             }
@@ -42,7 +44,7 @@ namespace api.Controllers
             {
                 return new NotFoundResult();
             }
-            else return new OkObjectResult(stock);
+            else return new OkObjectResult(stock.ToStockDto());
         }
     }
 }
