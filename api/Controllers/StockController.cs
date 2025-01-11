@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+// Purpose: This file contains the StockController class which is responsible for handling all the requests related to the Stock model. It contains methods to get all stocks, get a stock by id, create a stock, update a stock and delete a stock.
+
 using api.Data;
 using api.Dtos.Stock;
 using api.Mappers;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Controllers
 {
@@ -22,11 +20,13 @@ namespace api.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllStocks()
+        public async Task<IActionResult> GetAllStocks()
         {
-            var stocks = _context.Stocks.ToList()
-            .Select(stock => stock.ToStockDto());
-            if(stocks.Count() == 0 || stocks == null)
+            var stocks = await _context.Stocks.ToListAsync();
+
+            var stocksDto = stocks.Select(stock => stock.ToStockDto());
+
+            if(stocksDto.Count() == 0 || stocksDto == null)
             {
                 return NotFound();
             }
@@ -35,9 +35,9 @@ namespace api.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetStock([FromRoute]int id)
+        public async Task<IActionResult> GetStock([FromRoute]int id)
         {
-            var stock = _context.Stocks.Find(id);
+            var stock = await _context.Stocks.FindAsync(id);
             if (stock == null)
             {
                 return NotFound();
@@ -46,20 +46,20 @@ namespace api.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateStock([FromBody] CreateStockRequestDto stockDto)
+        public async Task<IActionResult> CreateStock([FromBody] CreateStockRequestDto stockDto)
         {
             var stock = stockDto.ToStockFromCreateDTO();
 
-            _context.Stocks.Add(stock);
-            _context.SaveChanges();
+            await _context.Stocks.AddAsync(stock);
+            await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetStock), new { id = stock.Id }, stock.ToStockDto());
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateStock([FromRoute] int id, [FromBody] UpdateStockRequestDto updateDto) {
+        public async Task<IActionResult> UpdateStock([FromRoute] int id, [FromBody] UpdateStockRequestDto updateDto) {
 
-            var stock = _context.Stocks.FirstOrDefault(stock => stock.Id == id);
+            var stock = await _context.Stocks.FirstOrDefaultAsync(stock => stock.Id == id);
             if (stock == null) {
                 return NotFound();
             }
@@ -77,9 +77,9 @@ namespace api.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteStock([FromRoute] int id)
+        public async Task<IActionResult> DeleteStock([FromRoute] int id)
         {
-            var stockModel = _context.Stocks.FirstOrDefault(stock => stock.Id == id);
+            var stockModel = await _context.Stocks.FirstOrDefaultAsync(stock => stock.Id == id);
 
             if (stockModel == null)
             {
@@ -87,7 +87,7 @@ namespace api.Controllers
             }
 
             _context.Stocks.Remove(stockModel);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }
