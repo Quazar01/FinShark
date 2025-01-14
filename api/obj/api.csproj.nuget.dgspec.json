@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "N:\\Courses\\C#\\Teddy Smith Tut\\ASP .NET\\FinShark\\api\\api.csproj": {}
+    "N:\\Courses\\Fullstack-Development\\___C#\\Teddy Smith Tut\\ASP .NET\\FinShark\\api\\api.csproj": {}
   },
   "projects": {
-    "N:\\Courses\\C#\\Teddy Smith Tut\\ASP .NET\\FinShark\\api\\api.csproj": {
+    "N:\\Courses\\Fullstack-Development\\___C#\\Teddy Smith Tut\\ASP .NET\\FinShark\\api\\api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "N:\\Courses\\C#\\Teddy Smith Tut\\ASP .NET\\FinShark\\api\\api.csproj",
+        "projectUniqueName": "N:\\Courses\\Fullstack-Development\\___C#\\Teddy Smith Tut\\ASP .NET\\FinShark\\api\\api.csproj",
         "projectName": "api",
-        "projectPath": "N:\\Courses\\C#\\Teddy Smith Tut\\ASP .NET\\FinShark\\api\\api.csproj",
+        "projectPath": "N:\\Courses\\Fullstack-Development\\___C#\\Teddy Smith Tut\\ASP .NET\\FinShark\\api\\api.csproj",
         "packagesPath": "C:\\Users\\samia\\.nuget\\packages\\",
-        "outputPath": "N:\\Courses\\C#\\Teddy Smith Tut\\ASP .NET\\FinShark\\api\\obj\\",
+        "outputPath": "N:\\Courses\\Fullstack-Development\\___C#\\Teddy Smith Tut\\ASP .NET\\FinShark\\api\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -65,6 +65,10 @@
             "Microsoft.EntityFrameworkCore.Tools": {
               "target": "Package",
               "version": "[9.0.0, )"
+            },
+            "OpenAI": {
+              "target": "Package",
+              "version": "[2.1.0, )"
             }
           },
           "imports": [
